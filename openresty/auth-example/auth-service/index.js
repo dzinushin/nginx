@@ -4,6 +4,13 @@ const app = express();
 
 app.use(express.json());
 
+// for simulate timeouts
+function sleep(ms) {
+    return new Promise((resolve) => {
+        setTimeout(resolve, ms);
+    });
+}
+
 app.get('/getXRealUserId', async (req, res) => {
     console.log("> getXRealUserId");
     const cookie = req.query.cookie;
@@ -11,6 +18,7 @@ app.get('/getXRealUserId', async (req, res) => {
 
     if (cianId === '100') {
         res.send({XRealUserId: '101', finAuth: true});
+        console.log("< getXRealUserId found by userId authorized user");
         return;
     }
 
@@ -26,12 +34,13 @@ app.get('/getXRealUserId', async (req, res) => {
         return
     }
 
-    console.log("< getXRealUserId unknown cookie");
+    console.log("< getXRealUserId unknown user");
     res.send({});
 });
 
 app.get('/generateFinauthCookie', async (req, res) => {
     console.log("> generateFinauthCookie");
+    // await sleep(500);
     // if (!!req.cookies.finauth) {
     //     res.send();
     //     console.log("< generateFinauthCookie exit 1");
